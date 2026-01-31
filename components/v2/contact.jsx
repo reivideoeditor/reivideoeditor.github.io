@@ -3,34 +3,18 @@
 import { useEffect, useState } from "react";
 import { useForm, ValidationError } from "@formspree/react";
 
-export default function ContactSection() {
-  const [formId, setFormId] = useState(null);
-  const [formState, setFormState] = useState(null);
-  const [handleSubmit, setHandleSubmit] = useState(null);
+/* -------------------------------
+   INNER FORM (hooks are legal)
+-------------------------------- */
+function ContactForm({ formId }) {
+  const [state, handleSubmit] = useForm(formId);
   const [showPopup, setShowPopup] = useState(false);
 
-  // 👇 Only runs in browser, never during prerender
   useEffect(() => {
-    const id = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
-
-    if (id) {
-      const [state, submit] = useForm(id);
-      setFormId(id);
-      setFormState(state);
-      setHandleSubmit(() => submit);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (formState?.succeeded) {
+    if (state.succeeded) {
       setShowPopup(true);
     }
-  }, [formState?.succeeded]);
-
-  // 👇 Prevents build-time crash
-  if (!formId || !formState || !handleSubmit) {
-    return null;
-  }
+  }, [state.succeeded]);
 
   return (
     <>
@@ -44,50 +28,34 @@ export default function ContactSection() {
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="name">Name</label>
-                <input id="name" type="text" name="name" required />
-                <ValidationError
-                  prefix="Name"
-                  field="name"
-                  errors={formState.errors}
-                />
+                <input id="name" name="name" required />
+                <ValidationError prefix="Name" field="name" errors={state.errors} />
               </div>
 
               <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <input id="email" type="email" name="email" required />
-                <ValidationError
-                  prefix="Email"
-                  field="email"
-                  errors={formState.errors}
-                />
+                <ValidationError prefix="Email" field="email" errors={state.errors} />
               </div>
 
               <div className="form-group">
                 <label htmlFor="subject">Subject</label>
-                <input id="subject" type="text" name="subject" required />
-                <ValidationError
-                  prefix="Subject"
-                  field="subject"
-                  errors={formState.errors}
-                />
+                <input id="subject" name="subject" required />
+                <ValidationError prefix="Subject" field="subject" errors={state.errors} />
               </div>
 
               <div className="form-group">
                 <label htmlFor="message">Message</label>
                 <textarea id="message" name="message" required />
-                <ValidationError
-                  prefix="Message"
-                  field="message"
-                  errors={formState.errors}
-                />
+                <ValidationError prefix="Message" field="message" errors={state.errors} />
               </div>
 
               <button
                 type="submit"
                 className="submit-btn"
-                disabled={formState.submitting}
+                disabled={state.submitting}
               >
-                {formState.submitting ? "Sending..." : "Send Message"}
+                {state.submitting ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
@@ -111,4 +79,21 @@ export default function ContactSection() {
       )}
     </>
   );
+}
+
+/* --------------------------------
+   WRAPPER (prevents build crash)
+--------------------------------- */
+export default function ContactSection() {
+  const [formId, setFormId] = useState(null);
+
+  useEffect(() => {
+    const id = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID;
+    if (id) setFormId(id);
+  }, []);
+
+  // ⛔ Prevents static export from running useForm
+  if (!formId) return null;
+
+  return <ContactForm formId={formId} />;
 }

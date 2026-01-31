@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-const SHEET_URL = `https://opensheet.elk.sh/${process.env.NEXT_PUBLIC_SPREADSHEET_ID}/before_&_after`;
-
 export default function BeforeAfter() {
   const [sections, setSections] = useState([]);
   const [activeVideoId, setActiveVideoId] = useState(null);
@@ -11,7 +9,21 @@ export default function BeforeAfter() {
 
   useEffect(() => {
     async function fetchVideos() {
-      const res = await fetch(SHEET_URL);
+      const spreadsheetId = process.env.NEXT_PUBLIC_SPREADSHEET_ID;
+
+      if (!spreadsheetId) {
+        console.error("NEXT_PUBLIC_SPREADSHEET_ID is missing");
+        return;
+      }
+
+      const url = `https://opensheet.elk.sh/${spreadsheetId}/before_after`;
+
+      const res = await fetch(url);
+      if (!res.ok) {
+        console.error("Failed to fetch Before & After sheet");
+        return;
+      }
+
       const data = await res.json();
       const rows = Array.isArray(data) ? data : [data];
 
@@ -79,27 +91,25 @@ export default function BeforeAfter() {
                   }
                 >
                   <div className="carousel-card-overlay">
-                  
-                  {isActive ? (
-                    <iframe
-                      src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
-                      allow="autoplay; encrypted-media"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <>
-                      <img
-                        src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
-                        alt={video.title}
+                    {isActive ? (
+                      <iframe
+                        src={`https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&rel=0`}
+                        allow="autoplay; encrypted-media"
+                        allowFullScreen
                       />
-                      <div className="play-icon">▶</div>
-                    </>
-                  )}
+                    ) : (
+                      <>
+                        <img
+                          src={`https://img.youtube.com/vi/${video.youtubeId}/hqdefault.jpg`}
+                          alt={video.title}
+                        />
+                        <div className="play-icon">▶</div>
+                      </>
+                    )}
                   </div>
-                {/* Title below card */}
-                <p className="carousel-title">{video.title}</p>
-                </div>
 
+                  <p className="carousel-title">{video.title}</p>
+                </div>
               </div>
             );
           })}
