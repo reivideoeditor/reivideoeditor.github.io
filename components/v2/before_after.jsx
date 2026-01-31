@@ -9,7 +9,7 @@ export default function BeforeAfter() {
 
   useEffect(() => {
     async function fetchVideos() {
-      const spreadsheetId = process.env.NEXT_PUBLIC_SPREADSHEET_ID;
+      const spreadsheetId = '1N0I8pMk4xIuIKn0mjO8pOblW7l3d-hszO0GB4y8wxoU';
 
       if (!spreadsheetId) {
         console.error("NEXT_PUBLIC_SPREADSHEET_ID is missing");

@@ -8,7 +8,7 @@ import kingsMedia from "@/public/images/3kings_media.jpg";
 import kingsKeen from "@/public/images/3keenking.jpg";
 import lakes from "@/public/images/lakes_logo.jpg";
 
-const SHEET_URL = `https://opensheet.elk.sh/${process.env.NEXT_PUBLIC_SPREADSHEET_ID}/clients`;
+const SHEET_URL = `https://opensheet.elk.sh/1N0I8pMk4xIuIKn0mjO8pOblW7l3d-hszO0GB4y8wxoU/clients`;
 
 const LOCAL_IMAGE_MAP = {
   kingsMedia,

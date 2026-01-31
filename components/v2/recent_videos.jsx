@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import AutoCarousel from "./auto_caraousal";
 
-const SHEET_URL = `https://opensheet.elk.sh/${process.env.NEXT_PUBLIC_SPREADSHEET_ID}/Videos`;
+const SHEET_URL = `https://opensheet.elk.sh/1N0I8pMk4xIuIKn0mjO8pOblW7l3d-hszO0GB4y8wxoU/Videos`;
 const ITEMS_PER_LOAD = 6;
 
 export default function RecentProjects() {
