@@ -5,8 +5,8 @@ import Header from "../components/v2/Header"
 import Footer from "../components/Footer";
 
 export const metadata = {
-  title: "Rei Video Editor",
-  description: "Professional video editing made easy with Rei Video Editor.",
+  title: "Vyke Studios",
+  description: "Professional video editing made easy with Vyke Studios.",
 };
 
 export default function RootLayout({ children }) {
